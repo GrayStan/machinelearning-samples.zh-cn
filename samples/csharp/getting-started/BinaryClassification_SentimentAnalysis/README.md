@@ -25,13 +25,13 @@
 ## 解决方案
 要解决这个问题，首先我们将建立一个机器学习模型。然后，我们将在现有数据上训练模型，评估其有多好，最后我们将使用该模型来预测新评论的情绪。 
 
-![Build -> Train -> Evaluate -> Consume](../shared_content/modelpipeline.png)
+![建立 -> 训练 -> 评估 -> 使用](../shared_content/modelpipeline.png)
 
 ### 1. 建立模型
 
 建立模型包括：
 
-* *定义要使用TextLoader加载（`wikiDetoxAnnotated40kRows.tsv`）到数据集的数据模式。 并以80:20的比例拆分为训练和测试数据集
+* 定义要使用TextLoader加载（`wikiDetoxAnnotated40kRows.tsv`）到数据集的数据模式。 并以80:20的比例拆分为训练和测试数据集
 
 * 创建一个估算器，并将数据转换为数值向量，以便它能够被机器学习算法有效地使用（使用“FeaturizeText”）
 
