@@ -1,3 +1,5 @@
+> 注意:我们希望听到您对ML.NET的反馈。请在[本调查](https://aka.ms/feb2020-mlnet-survey)中告诉我们您的想法。
+
 # ML.NET 示例
 
 [ML.NET](https://www.microsoft.com/net/learn/apps/machine-learning-and-ai/ml-dotnet) 是一个跨平台的开源机器学习框架，使.NET开发人员使用机器学习变得很容易。
@@ -91,7 +93,7 @@
   </tr>
   <tr>
   <td align="middle"><img src="images/image-classification.png" alt="Image Classification chart"><br><b>图像分类训练<br>    (High-Level API)<br>
-    <img src="images/app-type-getting-started-term-cursor.png" alt="Getting started icon">&nbsp;<a href="samples/csharp/getting-started/DeepLearning_ImageClassification_Training">C#</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="images/app-type-getting-started-term-cursor.png" alt="Getting started icon">&nbsp;<a href="samples/csharp/getting-started/DeepLearning_ImageClassification_Training">C#</a>&nbsp;<a href="samples/fsharp/getting-started/DeepLearning_ImageClassification_Training">F#</a>&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp;
     </td>
     <td align="middle"><img src="images/image-classification.png" alt="Image Classification chart"><br><b>图像分类预测<br>(Pretrained TensorFlow model scoring)<br><img src="images/app-type-getting-started-term-cursor.png" alt="Getting started icon">&nbsp;<a href="samples/csharp/getting-started/DeepLearning_ImageClassification_TensorFlow">C#</a> &nbsp; <a href="samples/fsharp/getting-started/DeepLearning_ImageClassification_TensorFlow">F#</a>&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp;
       <img src="images/app-type-e2e-black.png" alt="End-to-end app icon">&nbsp;<a href="samples/csharp/end-to-end-apps/DeepLearning_ImageClassification_TensorFlow">C#</a><b></td><b></td>
