@@ -324,7 +324,7 @@ ProductUnitTimeSeriesPrediction updatedSalesPrediction = forecastEngine.Predict(
  forecastEngine.CheckPoint(mlContext, outputModelPath);
 ```
 
-// TODO: To measure accuracy of the model, we need to compare real observed values against the forecasted values.  Refer to the following issue: https://github.com/dotnet/machinelearning/issues/4184.
+// TODO: 为了衡量模型的准确性，我们需要将实际观测值与预测值进行比较。参考以下issue：https://github.com/dotnet/machinelearning/issues/4184.
 
 ## 引用
 
