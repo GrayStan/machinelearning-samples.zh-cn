@@ -17,9 +17,9 @@
 
 ![建立 -> 训练 -> 评估 -> 使用](../shared_content/modelpipeline.png)
 
-### 1. 建立评估器
+### 1. 建立模型
 
-为了建立评估器，我们将：
+为了建立模型，我们将：
 
 * 定义如何读取从 https://archive.ics.uci.edu/ml/datasets/SMS+Spam+Collection 下载的垃圾信息数据集。 
 
