@@ -130,7 +130,6 @@
     <td align="middle"><img src="images/database.png" alt="Database chart"><br><img src="images/app-type-getting-started-term-cursor.png" alt="Getting started icon"><br><b>使用LoadFromEnumerable加载数据<br><a href="samples/csharp/getting-started/DatabaseIntegration">C#</a><b></td>
   <td align="middle"><img src="images/model-explain-smaller.png" alt="Model explainability chart"><br><img src="images/app-type-e2e-black.png" alt="End-to-end app icon"><br><b>模型可解释性<br><a href="samples/csharp/end-to-end-apps/Model-Explainability">C#</a></b></td>
 
-  <td align="middle"><img src="images/model-explain-smaller.png" alt="Model explainability chart"><br><img src="images/app-type-e2e-black.png" alt="End-to-end app icon"><br><b>模型可解释性<br><a href="samples/csharp/end-to-end-apps/Model-Explainability">C#</a></b></td>
   </tr>
 </table>
 
