@@ -113,7 +113,7 @@
 
 <table >
   <tr>
-    <td align="middle" colspan="3">横切情景</td>
+    <td align="middle" colspan="3">跨领域方案</td>
   </tr>
   <tr>
   <td align="middle"><img src="images/web.png" alt="web image" ><br><img src="images/app-type-e2e-black.png" alt="End-to-end app icon"><br><b>Web API上的可扩展模型<br><a href="samples/csharp/end-to-end-apps/ScalableMLModelOnWebAPI-IntegrationPkg">C#</a><b></td>
