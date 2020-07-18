@@ -2,12 +2,12 @@
 
 | ML.NET 版本 | API 类型          | 状态                        | 应用程序类型    | 数据类型 | 场景            | 机器学习任务                   | 算法                  |
 |----------------|-------------------|-------------------------------|-------------|-----------|---------------------|---------------------------|-----------------------------|
-| v0.7           | 动态 API | 最新版 | 控制台应用程序 | .txt 文件 | 聚类鸢尾花 | 聚类 | K-means++ |
+| v1.4           | 动态 API | 最新版 | 控制台应用程序 | .txt 文件 | 聚类鸢尾花 | 聚类 | K-means++ |
 
-在这个介绍性示例中，您将看到如何使用[ML.NET](https://www.microsoft.com/net/learn/apps/machine-learning-and-ai/ml-dotnet)将不同类型鸢尾花划分为不同组。在机器学习的世界中，这个任务被称为**群集**。
+在这个介绍性示例中，您将看到如何使用[ML.NET](https://www.microsoft.com/net/learn/apps/machine-learning-and-ai/ml-dotnet)将不同类型鸢尾花划分为不同组。在机器学习的世界中，这个任务被称为**聚类**。
 
 ## 问题
-为了演示聚类API的实际作用，我们将使用三种类型的鸢尾花：setosa、versicolor和versicolor。它们都存储在相同的数据集中。尽管这些花的类型是已知的，我们将不使用它，只对花的参数，如花瓣长度，花瓣宽度等运行聚类算法。这个任务是把所有的花分成三个不同的簇。我们期望不同类型的花属于不同的簇。
+为了演示聚类API的实际作用，我们将使用三种类型的鸢尾花：setosa、versicolor和virginica。它们都存储在同一个数据集中。尽管这些花的类型是已知的，我们也不会使用它，而只对花瓣长度、花瓣宽度等参数运行聚类算法。这个任务是把所有的花分成三个不同的簇。我们期望不同类型的花属于不同的簇。
 
 模型的输入使用下列鸢尾花参数：
 * petal length
@@ -30,40 +30,43 @@
 
 ### 1. 建立模型
 
-建立模型包括：上传数据（使用`TextLoader`加载`iris-full.txt`），转换数据以便ML算法（使用`Concatenate`）有效地使用，并选择学习算法（`KMeans`）。 所有这些步骤都存储在`trainingPipeline`中：
+建立模型包括：上传数据（使用`TextLoader`加载`iris-full.txt`），转换数据以便ML算法（使用`Concatenate`）有效地使用数据，并选择学习算法（`KMeans`）。 所有这些步骤都存储在`trainingPipeline`中：
 ```CSharp
 //Create the MLContext to share across components for deterministic results
 MLContext mlContext = new MLContext(seed: 1);  //Seed set to any number so you have a deterministic environment
 
 // STEP 1: Common data loading configuration
-TextLoader textLoader = mlContext.Data.TextReader(new TextLoader.Arguments()
-                                {
-                                    Separator = "\t",
-                                    HasHeader = true,
-                                    Column = new[]
-                                                {
-                                                    new TextLoader.Column("Label", DataKind.R4, 0),
-                                                    new TextLoader.Column("SepalLength", DataKind.R4, 1),
-                                                    new TextLoader.Column("SepalWidth", DataKind.R4, 2),
-                                                    new TextLoader.Column("PetalLength", DataKind.R4, 3),
-                                                    new TextLoader.Column("PetalWidth", DataKind.R4, 4),
-                                                }
-                                });
-
-IDataView fullData = textLoader.Read(DataPath);
+IDataView fullData = mlContext.Data.LoadFromTextFile(path: DataPath,
+                                                columns:new[]
+                                                            {
+                                                                new TextLoader.Column(DefaultColumnNames.Label, DataKind.Single, 0),
+                                                                new TextLoader.Column(nameof(IrisData.SepalLength), DataKind.Single, 1),
+                                                                new TextLoader.Column(nameof(IrisData.SepalWidth), DataKind.Single, 2),
+                                                                new TextLoader.Column(nameof(IrisData.PetalLength), DataKind.Single, 3),
+                                                                new TextLoader.Column(nameof(IrisData.PetalWidth), DataKind.Single, 4),
+                                                            },
+                                                hasHeader:true,
+                                                separatorChar:'\t');
+                                                
+//Split dataset in two parts: TrainingDataset (80%) and TestDataset (20%)
+DataOperationsCatalog.TrainTestData trainTestData = mlContext.Data.TrainTestSplit(fullData, testFraction: 0.2);
+trainingDataView = trainTestData.TrainSet;
+testingDataView = trainTestData.TestSet;
 
 //STEP 2: Process data transformations in pipeline
-var dataProcessPipeline = mlContext.Transforms.Concatenate("Features", "SepalLength", "SepalWidth", "PetalLength", "PetalWidth");
+var dataProcessPipeline = mlContext.Transforms.Concatenate("Features", nameof(IrisData.SepalLength), nameof(IrisData.SepalWidth), nameof(IrisData.PetalLength), nameof(IrisData.PetalWidth));
 
 // STEP 3: Create and train the model     
-var trainer = mlContext.Clustering.Trainers.KMeans(features: "Features", clustersCount: 3);
+var trainer = mlContext.Clustering.Trainers.KMeans(featureColumnName: "Features", numberOfClusters: 3);
 var trainingPipeline = dataProcessPipeline.Append(trainer);
 ```
+
 ### 2. 训练模型
 训练模型是在给定数据上运行所选算法的过程。 要执行训练，您需要调用`Fit()`方法。
 ```CSharp
 var trainedModel = trainingPipeline.Fit(trainingDataView);
 ```
+
 ### 3. 使用模型
 在建立和训练模型之后，我们可以使用`Predict()`API来预测鸢尾花的簇，并计算从给定花参数到每个簇（簇的每个质心）的距离。
 
@@ -78,10 +81,10 @@ var trainedModel = trainingPipeline.Fit(trainingDataView);
                 };
 
                 // Create prediction engine related to the loaded trained model
-                var predFunction = trainedModel.MakePredictionFunction<IrisData, IrisPrediction>(mlContext);
+                var predEngine = mlContext.Model.CreatePredictionEngine<IrisData, IrisPrediction>(model);
 
                 //Score
-                var resultprediction = predFunction.Predict(sampleIrisData);
+                var resultprediction = predEngine.Predict(sampleIrisData);
                 
                 Console.WriteLine($"Cluster assigned for setosa flowers:" + resultprediction.SelectedClusterId);
 ```
