@@ -1,10 +1,14 @@
 # 图像分类 - 评分示例
 
+| ML.NET 版本 | API 类型          | 状态                        | 应用程序类型    | 数据类型 | 场景            | 机器学习任务                   | 算法                  |
+|----------------|-------------------|-------------------------------|-------------|-----------|---------------------|---------------------------|-----------------------------|
+| v1.4           | 动态 API | 最新版 | 控制台应用程序 | 图像和文本标签 | 图像分类 | 聚类 | K-means++ |
+
 ## 问题
 图像分类是许多业务场景中的常见情况。 对于这些情况，您可以使用预先训练的模型或训练自己的模型来对特定于自定义域的图像进行分类。
 
 ## 数据集
- 有两个数据源：`tsv`文件和图像文件。[tsv 文件](./ImageClassification/assets/inputs/images/tags.tsv) 包含2列：第一个定义为`ImagePath`，第二个定义为对应于图像的`Label`。正如你所看到的，文件没有标题行，看起来像这样：
+有两个数据源：`tsv`文件和图像文件。[tsv 文件](./ImageClassification/assets/inputs/images/tags.tsv) 包含2列：第一个定义为`ImagePath`，第二个定义为对应于图像的`Label`。正如你所看到的，文件没有标题行，看起来像这样：
 ```tsv
 broccoli.jpg	broccoli
 broccoli.png	broccoli
@@ -27,8 +31,8 @@ toaster.jpg	toaster
 toaster2.png	toaster
 toaster3.jpg	toaster
 ```
-训练和测试图像位于assets文件夹中。这些图像属于维基共享资源。
-> *[维基共享资源](https://commons.wikimedia.org/w/index.php?title=Main_Page&oldid=313158208), 免费媒体存储库。* 于 10:48, October 17, 2018 检索自:  
+训练和测试图像位于assets文件夹中。这些图像属于Wikimedia Commons。
+> *[Wikimedia Commons](https://commons.wikimedia.org/w/index.php?title=Main_Page&oldid=313158208), 免费媒体存储库。* 于2018年10月17日10:48检索自:  
 > https://commons.wikimedia.org/wiki/Pizza  
 > https://commons.wikimedia.org/wiki/Coffee_pot  
 > https://commons.wikimedia.org/wiki/Toaster  
@@ -39,9 +43,9 @@ toaster3.jpg	toaster
 有多个模型被预先训练用于图像分类。在本例中，我们将使用基于Inception拓扑的模型，并用来自Image.Net的图像进行训练。这个模型可以从 https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip 下载, 也可以在 `/ src / ImageClassification / assets /inputs / inception / tensorflow_inception_graph.pb` 找到。
 
 ##  解决方案
-控制台应用程序项目`ImageClassification.Score`可用于基于预先训练的Inception-v3 TensorFlow模型对样本图像进行分类。
+控制台应用程序项目`ImageClassification.Score`可用于基于预先训练的Inception-5h TensorFlow模型对样本图像进行分类。
 
-再次注意，本示例仅使用预先训练的TensorFlow模型和ML.NET API。 因此，它**不会**训练任何ML.NET模型。 目前，在ML.NET中仅支持使用现有的TensorFlow训练模型进行评分/预测。
+同样，请注意，本示例仅使用预先训练的TensorFlow模型和ML.NET API。 因此，它**不会**训练任何ML.NET模型。 目前，在ML.NET中仅支持使用现有的TensorFlow训练模型进行评分/预测。
 
 您需要按照以下步骤执行分类测试：
 
@@ -54,18 +58,28 @@ toaster3.jpg	toaster
 解决方案中有一个名为`ImageClassification.Score`的项目，它负责以TensorFlow格式加载模型，然后对图像进行分类。
 
 ### ML.NET：模型评分
-`TextLoader.CreateReader()`用于定义将用于在ML.NET模型中加载图像的文本文件的模式。
+在一个类中定义数据模式，并在使用TextLoader加载数据时引用该类型。这里的类是ImageNetData。
 
 ```csharp
- var loader = new TextLoader(env,
-    new TextLoader.Arguments
-    {
-        Column = new[] {
-            new TextLoader.Column("ImagePath", DataKind.Text, 0)
-        }
-    });
+public class ImageNetData
+{
+    [LoadColumn(0)]
+    public string ImagePath;
 
-var data = loader.Read(new MultiFileSource(dataLocation));
+    [LoadColumn(1)]
+    public string Label;
+
+    public static IEnumerable<ImageNetData> ReadFromCsv(string file, string folder)
+    {
+        return File.ReadAllLines(file)
+         .Select(x => x.Split('\t'))
+         .Select(x => new ImageNetData()
+         {
+             ImagePath = Path.Combine(folder, x[0]),
+             Label = x[1],
+         });
+    }
+}
 ```
 
 用于加载图像的图像文件有两列：第一列定义为`ImagePath` ，第二列是与图像对应的`Label`。
