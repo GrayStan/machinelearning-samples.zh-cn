@@ -29,11 +29,6 @@
 
 有关相关主题的当前和过去项目的更多详细信息，请访问 http://mlg.ulb.ac.be/BruFence 和 http://mlg.ulb.ac.be/ARTML
 
-## ML Task - [Binary Classification](https://en.wikipedia.org/wiki/Binary_classification)
-
-Binary or binomial classification is the task of classifying the elements of a given set into two groups (predicting which group each one belongs to) on the basis of a classification rule. Contexts requiring a decision as to whether or not an item has some qualitative property, some specified characteristic.
-
-If you would like to learn how to detect fraud using anomaly detection, visit the [Anomaly Detection Credit Card Fraud Detection sample](../AnomalyDetection_CreditCardFraudDetection).
 ## 机器学习任务 - [二元分类](https://en.wikipedia.org/wiki/Binary_classification)
 
 二元或二项式分类是根据分类规则将给定集合中的元素分成两组（预测每个元素属于哪个组）的任务。需要决定某项是否具有某种定性属性、某些特定特征的上下文
