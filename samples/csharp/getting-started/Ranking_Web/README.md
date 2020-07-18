@@ -2,7 +2,7 @@
 
 | ML.NET 版本 | API 类型          | 状态                        | 应用程序类型    | 数据类型 | 场景            | 机器学习任务                   | 算法                  |
 |----------------|-------------------|-------------------------------|-------------|-----------|---------------------|---------------------------|-----------------------------|
-| v1.3.1         | 动态API       | 最新 |  控制台应用程序 | .csv 文件 | 搜索引擎结果排名 | 排名          | LightGBM |
+| v1.4         | 动态API       | 最新 |  控制台应用程序 | .csv 文件 | 搜索引擎结果排名 | 排名          | LightGBM |
 
 这个介绍性示例演示如何使用ml.net来预测显示搜索引擎结果的最佳顺序。在机器学习领域，这种预测被称为排名。
 
@@ -107,7 +107,7 @@ IEstimator<ITransformer> dataPipeline = mlContext.Transforms.Concatenate(Feature
     .Append(mlContext.Transforms.Conversion.Hash(nameof(SearchResultData.GroupId), nameof(SearchResultData.GroupId), numberOfBits: 20));
 
 // Set the LightGBM LambdaRank trainer.
-IEstimator<ITransformer> trainer = mlContext.Ranking.Trainers.LightGbm(labelColumnName: nameof(SearchResultData.Label), featureColumnName: FeaturesVectorName, rowGroupColumnName: nameof(SearchResultData.GroupId));  ;
+IEstimator<ITransformer> trainer = mlContext.Ranking.Trainers.LightGbm(labelColumnName: nameof(SearchResultData.Label), featureColumnName: FeaturesVectorName, rowGroupColumnName: nameof(SearchResultData.GroupId));
 IEstimator<ITransformer> trainerPipeline = dataPipeline.Append(trainer);
 `````
 
