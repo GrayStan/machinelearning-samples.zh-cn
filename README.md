@@ -1,3 +1,6 @@
+# 欢迎关注我的公众号
+![](https://files-cdn.cnblogs.com/files/feiyun0112/qrcode_for_gh_61af3e28f945_344.bmp)
+
 > 注意:我们希望听到您对ML.NET的反馈。请在[本调查](https://aka.ms/feb2020-mlnet-survey)中告诉我们您的想法。
 
 # ML.NET 示例
